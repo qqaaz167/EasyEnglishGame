@@ -133,23 +133,16 @@
       overflow: hidden;
       min-height: 200px;
     }
-    .boss-badge {
-      display: none;
+    .boss-title-bar {
       position: absolute;
-      top: 8px; left: 50%; transform: translateX(-50%);
-      background: linear-gradient(135deg, #800000, #ff4500);
-      color: #fff;
-      font-size: 0.72rem;
+      top: 10px; left: 50%; transform: translateX(-50%);
+      color: var(--red);
+      font-size: 1.1rem;
       font-weight: 900;
-      padding: 3px 12px;
-      border-radius: 20px;
       letter-spacing: 2px;
-      box-shadow: 0 0 12px rgba(255,69,0,0.6);
-      animation: bossBadgePulse 1.5s ease-in-out infinite alternate;
-    }
-    @keyframes bossBadgePulse {
-      from { box-shadow: 0 0 8px rgba(255,69,0,0.4); }
-      to   { box-shadow: 0 0 20px rgba(255,69,0,0.9); }
+      text-shadow: 0 0 10px rgba(244,67,54,0.7);
+      white-space: nowrap;
+      pointer-events: none;
     }
     .boss-area {
       position: absolute;
@@ -519,11 +512,11 @@
   <div class="screen" id="screen-battle">
     <button class="btn-back" id="btn-back-home" style="align-self:flex-start; margin-bottom:6px">← 回首頁</button>
     <div class="battle-stage" id="battle-stage">
-      <!-- 大魔王標籤 -->
-      <div class="boss-badge" id="boss-badge">⚠ 究極魔獸 ⚠</div>
+      <!-- 怪物名稱標題 -->
+      <div class="boss-title-bar" id="boss-title-bar"></div>
       <!-- Boss -->
       <div class="boss-area">
-        <div class="boss-name" id="boss-name">青蛙魔</div>
+        <div class="boss-name" id="boss-name" style="display:none"></div>
         <div class="boss-hp-bar-wrap">
           <div class="boss-hp-bar" id="boss-hp-bar" style="width:100%"></div>
         </div>
@@ -537,12 +530,6 @@
       </div>
       <!-- 刀光 -->
       <div id="slash-effect"></div>
-      <!-- 計數器 -->
-      <div class="battle-counters">
-        <div class="attack-target-text">目標：<span id="attack-target">?</span> 攻擊</div>
-        <div>本場：<span id="q-current">0</span>/<span id="attack-target-echo">?</span></div>
-        <div class="win-count">累計勝：<span id="win-count">0</span></div>
-      </div>
     </div>
     <!-- 問題 -->
     <div class="question-area">

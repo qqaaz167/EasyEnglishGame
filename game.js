@@ -346,9 +346,8 @@ const CharacterRenderer = {
       <div class="bv-weapons">${data.bossWeapon}</div>
     `;
     nameEl.textContent = data.name;
-    // 大魔王標籤
-    const badge = document.getElementById('boss-badge');
-    if (badge) badge.style.display = levelKey === 'boss' ? 'block' : 'none';
+    const titleBar = document.getElementById('boss-title-bar');
+    if (titleBar) titleBar.textContent = data.boss || data.name;
   },
 };
 
@@ -384,15 +383,7 @@ const UIRenderer = {
       btn.disabled = false;
     });
   },
-  renderBattleCounters() {
-    const b = STATE.battle;
-    const prog = STATE.levelProgress[b.levelKey];
-    document.getElementById('attack-target').textContent = b.attackTarget;
-    const echoEl = document.getElementById('attack-target-echo');
-    if (echoEl) echoEl.textContent = b.attackTarget;
-    document.getElementById('q-current').textContent = b.correctInBattle;
-    document.getElementById('win-count').textContent  = prog.winCount;
-  },
+  renderBattleCounters() {},
   renderHomeLevelCards() {
     const container = document.getElementById('level-cards');
     container.innerHTML = '';
