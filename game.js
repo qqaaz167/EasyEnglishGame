@@ -12,11 +12,11 @@ const CONFIG = {
   CRIT_CHANCE: 0.25,
   ANSWER_LOCK_MS: 900,
   TREASURES_PER_LEVEL: 8,
+  NORMAL_ATTACK_TARGET: 6,
   BOSS_ATTACK_TARGET: 10,
   STORAGE_KEY: 'georgelearn_save',
 };
 
-function randomAttackTarget() { return Math.floor(Math.random() * 3) + 5; } // 5,6,7
 
 // ===== 等級資料 =====
 const LEVEL_DATA = [
@@ -220,7 +220,7 @@ const BattleEngine = {
     if (levelKey !== 'boss') {
       const nextKey = String(Number(levelKey) + 1);
       if (prog.winCount >= CONFIG.WINS_TO_UNLOCK) {
-        if (nextKey <= '10' && STATE.levelProgress[nextKey]) {
+        if (Number(nextKey) <= 10 && STATE.levelProgress[nextKey]) {
           STATE.levelProgress[nextKey].unlocked = true;
         } else if (nextKey === '11') {
           // 解鎖大魔王
@@ -607,7 +607,7 @@ const GameController = {
     b.playerHp = CONFIG.PLAYER_HP;
     b.locked = false;
     b._resultHandled = false;
-    b.attackTarget = levelKey === 'boss' ? CONFIG.BOSS_ATTACK_TARGET : randomAttackTarget();
+    b.attackTarget = levelKey === 'boss' ? CONFIG.BOSS_ATTACK_TARGET : CONFIG.NORMAL_ATTACK_TARGET;
     b.bossHp = CONFIG.BOSS_MAX_HP;
     b.currentQ = 0;
 
