@@ -624,7 +624,7 @@ const GameController = {
     CharacterRenderer.renderPlayer(levelKey);
     CharacterRenderer.renderBoss(levelKey);
     UIRenderer.renderHearts(b.playerHp, CONFIG.PLAYER_HP);
-    UIRenderer.renderBossHp(b.bossHp, CONFIG.BOSS_MAX_HP);
+    UIRenderer.renderBossHp(b.attackTarget, b.attackTarget);
     UIRenderer.renderBattleCounters();
     UIRenderer.renderQuestion(b.questions[0], 0, b.questions.length);
     ScreenManager.show('battle');
@@ -651,7 +651,7 @@ const GameController = {
       AnimationEngine.playerHit();
     }
     UIRenderer.renderHearts(b.playerHp, CONFIG.PLAYER_HP);
-    UIRenderer.renderBossHp(b.bossHp, CONFIG.BOSS_MAX_HP);
+    UIRenderer.renderBossHp(b.attackTarget - b.correctInBattle, b.attackTarget);
 
     b.locked = true;
     setTimeout(() => { b.locked = false; this.nextQuestion(); }, CONFIG.ANSWER_LOCK_MS);
