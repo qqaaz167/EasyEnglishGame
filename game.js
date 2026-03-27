@@ -367,8 +367,8 @@ const UIRenderer = {
     bar.style.width = pct + '%';
     bar.style.background = pct > 50 ? '#f44336' : (pct > 25 ? '#ff9800' : '#ffeb3b');
   },
-  renderQuestion(q, idx, total) {
-    document.getElementById('question-progress').textContent = `第 ${idx + 1} / ${total} 題`;
+  renderQuestion(q, idx) {
+    document.getElementById('question-progress').textContent = `第 ${idx + 1} 題`;
     const prompt = document.getElementById('question-prompt');
     const lbl    = document.getElementById('question-type-label');
     if (q.type === 'emoji') {
@@ -626,7 +626,7 @@ const GameController = {
     UIRenderer.renderHearts(b.playerHp, CONFIG.PLAYER_HP);
     UIRenderer.renderBossHp(b.attackTarget, b.attackTarget);
     UIRenderer.renderBattleCounters();
-    UIRenderer.renderQuestion(b.questions[0], 0, b.questions.length);
+    UIRenderer.renderQuestion(b.questions[0], 0);
     ScreenManager.show('battle');
   },
   handleAnswer(chosen) {
@@ -662,7 +662,7 @@ const GameController = {
     if (result !== 'ongoing') { this.endBattle(result === 'win'); return; }
     b.currentQ++;
     if (b.currentQ >= b.questions.length) { this.endBattle(false); return; }
-    UIRenderer.renderQuestion(b.questions[b.currentQ], b.currentQ, b.questions.length);
+    UIRenderer.renderQuestion(b.questions[b.currentQ], b.currentQ);
     UIRenderer.renderBattleCounters();
   },
   endBattle(won) {
