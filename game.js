@@ -691,6 +691,37 @@ const GameController = {
         ScreenManager.show('home');
       }
     });
+    // 連點頭銜 15 下：解鎖該冊全寶物
+    let titleClickCount = 0, titleClickTimer = null;
+    document.getElementById('home-title-text').addEventListener('click', () => {
+      titleClickCount++;
+      clearTimeout(titleClickTimer);
+      titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 6000);
+      if (titleClickCount >= 15) {
+        titleClickCount = 0;
+        const vol = STATE.currentVolume;
+        const isVol2 = vol === 2;
+        const keyOf = (lv) => isVol2 ? `v2_${lv}` : String(lv);
+        const bossKey = isVol2 ? 'v2_boss' : 'boss';
+        const td = isVol2 ? TREASURE_DATA_VOL2 : TREASURE_DATA;
+        const boss = isVol2 ? FINAL_BOSS_VOL2 : FINAL_BOSS;
+        for (let i = 1; i <= CONFIG.LEVELS; i++) {
+          const prog = STATE.levelProgress[keyOf(i)];
+          prog.unlocked = true;
+          prog.winCount = Math.max(prog.winCount, CONFIG.WINS_TO_UNLOCK);
+          prog.treasures = [...(td[i] || [])];
+        }
+        const bossProg = STATE.levelProgress[bossKey];
+        bossProg.unlocked = true;
+        bossProg.winCount = Math.max(bossProg.winCount, 1);
+        if (!bossProg.treasures.includes('crown')) bossProg.treasures.push('crown');
+        if (!STATE.titlesEarned.includes(boss.title)) STATE.titlesEarned.push(boss.title);
+        STATE.displayTitle = boss.title;
+        StorageManager.save();
+        UIRenderer.renderHomeLevelCards();
+        UIRenderer.renderHomeTitle();
+      }
+    });
     document.getElementById('btn-reset').addEventListener('click', () => {
       if (confirm('確定要重置所有進度？這將無法復原。')) {
         StorageManager.reset();
