@@ -693,11 +693,11 @@ const GameController = {
     });
     // 連點頭銜 15 下：解鎖該冊全寶物
     let titleClickCount = 0, titleClickTimer = null;
-    document.getElementById('home-title-text').addEventListener('click', () => {
+    document.querySelector('.home-title-display').addEventListener('click', () => {
       titleClickCount++;
       clearTimeout(titleClickTimer);
       titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 6000);
-      if (titleClickCount >= 15) {
+      if (titleClickCount >= 11) {
         titleClickCount = 0;
         const vol = STATE.currentVolume;
         const isVol2 = vol === 2;
