@@ -498,6 +498,28 @@
     }
     .btn-back:hover { border-color: var(--text-dim); color: var(--text); }
 
+    /* ===== 冊數切換 ===== */
+    .vol-tabs { display: flex; gap: 8px; width: 100%; }
+    .vol-tab {
+      flex: 1; padding: 8px; border-radius: 10px;
+      border: 1px solid #444; background: var(--bg-mid);
+      color: var(--text-dim); cursor: pointer; font-weight: 700; font-size: 0.9rem;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+    }
+    .vol-tab.active { border-color: var(--gold); color: var(--gold); background: rgba(255,215,0,0.08); }
+    .vol-tab:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* ===== 圖鑑冊數切換 ===== */
+    .treasury-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .treasury-tab {
+      flex: 1; padding: 7px; border-radius: 8px;
+      border: 1px solid #333; background: var(--bg-mid);
+      color: var(--text-dim); cursor: pointer; font-size: 0.85rem; font-weight: 700;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .treasury-tab.active { border-color: var(--gold); color: var(--gold); }
+    .treasury-tab:disabled { opacity: 0.35; cursor: not-allowed; }
+
     @media (max-height: 700px) {
       .battle-stage { min-height: 160px; }
       .boss-sprite.level-boss .bv-main,
@@ -519,6 +541,10 @@
     <div class="home-action-row">
       <button class="btn-treasury" id="btn-open-treasury">📖 寶物圖鑑</button>
       <button class="btn-reset"    id="btn-reset">重置</button>
+    </div>
+    <div class="vol-tabs" id="vol-tabs">
+      <button class="vol-tab active" id="tab-vol1">第一冊</button>
+      <button class="vol-tab" id="tab-vol2" disabled>第二冊 🌑</button>
     </div>
     <div class="level-cards" id="level-cards"></div>
   </div>
@@ -598,6 +624,10 @@
       <h2>📖 寶物圖鑑</h2>
       <div class="collection-count">已收集 <span id="total-collected">0</span>/<span id="total-max">81</span></div>
     </div>
+    <div class="treasury-tabs">
+      <button class="treasury-tab active" id="tt-vol1">第一冊</button>
+      <button class="treasury-tab" id="tt-vol2" disabled>第二冊 🌑</button>
+    </div>
     <div id="treasury-levels"></div>
     <!-- 王冠 -->
     <div class="crown-section">
@@ -612,6 +642,7 @@
   </div>
 
   <script src="words.js"></script>
+  <script src="words_vol2.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
