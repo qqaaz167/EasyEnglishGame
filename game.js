@@ -751,6 +751,8 @@ const GameController = {
       ScreenManager.show('home');
     });
     document.querySelectorAll('.btn-answer').forEach(btn => {
+      btn.addEventListener('mouseenter', () => { if (!btn.disabled) btn.classList.add('hovered'); });
+      btn.addEventListener('mouseleave', () => { btn.classList.remove('hovered'); });
       btn.addEventListener('click', () => {
         if (STATE.battle.locked) return;
         this.handleAnswer(btn.textContent);
