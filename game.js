@@ -377,10 +377,12 @@ const UIRenderer = {
       prompt.textContent = q.prompt;
       lbl.textContent = '選出正確的英文單字';
     }
+    document.getElementById('btn-confirm-wrong').style.display = 'none';
     document.querySelectorAll('.btn-answer').forEach((btn, i) => {
       btn.textContent = q.options[i];
       btn.className = 'btn-answer';
       btn.disabled = false;
+      btn.blur();
     });
   },
   renderBattleCounters() {},
@@ -645,7 +647,17 @@ const GameController = {
     UIRenderer.renderBossHp(b.attackTarget - b.correctInBattle, b.attackTarget);
 
     b.locked = true;
-    setTimeout(() => { b.locked = false; this.nextQuestion(); }, CONFIG.ANSWER_LOCK_MS);
+    if (isCorrect) {
+      setTimeout(() => { b.locked = false; this.nextQuestion(); }, CONFIG.ANSWER_LOCK_MS);
+    } else {
+      const confirmBtn = document.getElementById('btn-confirm-wrong');
+      confirmBtn.style.display = 'block';
+      confirmBtn.onclick = () => {
+        confirmBtn.style.display = 'none';
+        b.locked = false;
+        this.nextQuestion();
+      };
+    }
   },
   nextQuestion() {
     const b = STATE.battle;

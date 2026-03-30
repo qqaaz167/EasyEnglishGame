@@ -259,6 +259,21 @@
     .btn-answer.wrong   { background: var(--red);   border-color: #e57373; animation: wrongShake  0.4s ease-out; }
     @keyframes correctPulse { 0%{transform:scale(1)} 40%{transform:scale(1.06)} 100%{transform:scale(1)} }
     @keyframes wrongShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+    .btn-confirm-wrong {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      background: var(--gold);
+      color: #1a1a2e;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      animation: correctPulse 0.4s ease-out;
+    }
+    .btn-confirm-wrong:hover { filter: brightness(1.1); }
 
     /* ===== 刀光特效 ===== */
     #slash-effect {
@@ -543,6 +558,7 @@
       <button class="btn-answer" id="btn-ans-2"></button>
       <button class="btn-answer" id="btn-ans-3"></button>
     </div>
+    <button class="btn-confirm-wrong" id="btn-confirm-wrong" style="display:none">我知道了 ✓</button>
   </div>
 
   <!-- ====== 結果 ====== -->
