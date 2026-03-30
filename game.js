@@ -691,35 +691,63 @@ const GameController = {
         ScreenManager.show('home');
       }
     });
-    // 連點頭銜 15 下：解鎖該冊全寶物
+    // 連點頭銜 7 下：過下一個未完成等級（補滿勝場、解鎖下一關、全寶物、授予稱號）
     let titleClickCount = 0, titleClickTimer = null;
     document.querySelector('.home-title-display').addEventListener('click', () => {
       titleClickCount++;
       clearTimeout(titleClickTimer);
-      titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 6000);
-      if (titleClickCount >= 11) {
+      titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 3000);
+      if (titleClickCount >= 7) {
         titleClickCount = 0;
         const vol = STATE.currentVolume;
         const isVol2 = vol === 2;
         const keyOf = (lv) => isVol2 ? `v2_${lv}` : String(lv);
         const bossKey = isVol2 ? 'v2_boss' : 'boss';
         const td = isVol2 ? TREASURE_DATA_VOL2 : TREASURE_DATA;
+        const ld = isVol2 ? LEVEL_DATA_VOL2 : LEVEL_DATA;
         const boss = isVol2 ? FINAL_BOSS_VOL2 : FINAL_BOSS;
+
+        // 找第一個尚未完成的普通等級
+        let advanced = false;
         for (let i = 1; i <= CONFIG.LEVELS; i++) {
-          const prog = STATE.levelProgress[keyOf(i)];
-          prog.unlocked = true;
-          prog.winCount = Math.max(prog.winCount, CONFIG.WINS_TO_UNLOCK);
-          prog.treasures = [...(td[i] || [])];
+          const key  = keyOf(i);
+          const prog = STATE.levelProgress[key];
+          if (prog.winCount < CONFIG.WINS_TO_UNLOCK) {
+            // 補齊該等級
+            prog.unlocked = true;
+            prog.winCount = CONFIG.WINS_TO_UNLOCK;
+            prog.treasures = [...(td[i] || [])];
+            // 授予稱號
+            const title = ld[i] && ld[i].title;
+            if (title && !STATE.titlesEarned.includes(title)) STATE.titlesEarned.push(title);
+            STATE.displayTitle = title || STATE.displayTitle;
+            // 解鎖下一關
+            if (i < CONFIG.LEVELS) {
+              STATE.levelProgress[keyOf(i + 1)].unlocked = true;
+            } else {
+              STATE.levelProgress[bossKey].unlocked = true;
+            }
+            advanced = true;
+            break;
+          }
         }
-        const bossProg = STATE.levelProgress[bossKey];
-        bossProg.unlocked = true;
-        bossProg.winCount = Math.max(bossProg.winCount, 1);
-        if (!bossProg.treasures.includes('crown')) bossProg.treasures.push('crown');
-        if (!STATE.titlesEarned.includes(boss.title)) STATE.titlesEarned.push(boss.title);
-        STATE.displayTitle = boss.title;
-        StorageManager.save();
-        UIRenderer.renderHomeLevelCards();
-        UIRenderer.renderHomeTitle();
+        // 所有普通等級都完成，改推進大魔王
+        if (!advanced) {
+          const bossProg = STATE.levelProgress[bossKey];
+          if (!bossProg.unlocked || bossProg.winCount < 1) {
+            bossProg.unlocked = true;
+            bossProg.winCount = Math.max(bossProg.winCount, 1);
+            if (!bossProg.treasures.includes('crown')) bossProg.treasures.push('crown');
+            if (!STATE.titlesEarned.includes(boss.title)) STATE.titlesEarned.push(boss.title);
+            STATE.displayTitle = boss.title;
+            advanced = true;
+          }
+        }
+        if (advanced) {
+          StorageManager.save();
+          UIRenderer.renderHomeLevelCards();
+          UIRenderer.renderHomeTitle();
+        }
       }
     });
     document.getElementById('btn-reset').addEventListener('click', () => {
